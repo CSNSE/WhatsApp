@@ -1,9 +1,9 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import NotImplementedScreen from '../screens/NotImplementedScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import NotImplementedScreen from "../screens/NotImplementedScreen";
+import SettingsScreen from "../screens/SettingsScreen";
 
-import ChatsScreen from '../screens/ChatsScreen';
-import { Ionicons, Entypo } from '@expo/vector-icons';
+import ChatsScreen from "../screens/ChatsScreen/ChatsScreen";
+import { Ionicons, Entypo } from "@expo/vector-icons";
 const Tab = createBottomTabNavigator();
 const MainTabNavigator = () => {
   return (
