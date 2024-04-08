@@ -1,5 +1,5 @@
 import { FlatList } from "react-native";
-import ChatListItem from "../../components/ChatListItem";
+import ChatListItem from "../../components/ChatListItem/Index";
 import { API, graphqlOperation, Auth } from "aws-amplify";
 import { listChatRooms } from "./queries";
 import { useEffect, useState } from "react";

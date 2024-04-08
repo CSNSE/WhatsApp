@@ -1,12 +1,14 @@
 import { Text, Image, StyleSheet, Pressable, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { API, graphqlOperation, Auth } from "aws-amplify";
-import { createChatRoom, createUserChatRoom } from "../graphql/mutations";
-import { getCommonChatRoomWithUser } from "../services/chatRoomService";
+import { createChatRoom, createUserChatRoom } from "../../graphql/mutations";
+import { getCommonChatRoomWithUser } from "../../services/chatRoomService";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+
 dayjs.extend(relativeTime);
+
 const ContactListItem = ({ user }) => {
   const navigation = useNavigation();
 
@@ -55,6 +57,7 @@ const ContactListItem = ({ user }) => {
         <Text style={styles.name} numberOfLines={1}>
           {user.name}
         </Text>
+
         <Text numberOfLines={2} style={styles.subTitle}>
           {user.status}
         </Text>
@@ -62,6 +65,7 @@ const ContactListItem = ({ user }) => {
     </Pressable>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
@@ -86,4 +90,5 @@ const styles = StyleSheet.create({
     color: "gray",
   },
 });
+
 export default ContactListItem;

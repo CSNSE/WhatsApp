@@ -1,16 +1,15 @@
-
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
-import Navigator from './src/navigation/Navigator';
-// App.js
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, View } from "react-native";
+import Navigator from "./src/navigation";
+import { Amplify, Auth, API, graphqlOperation } from "aws-amplify";
 import { withAuthenticator } from "aws-amplify-react-native";
-import awsconfig from './src/aws-exports'
+import awsconfig from "./src/aws-exports";
 import { useEffect } from "react";
 import { getUser } from "./src/graphql/queries";
 import { createUser } from "./src/graphql/mutations";
-import { Amplify, Auth, API, graphqlOperation } from "aws-amplify";
 
 Amplify.configure({ ...awsconfig, Analytics: { disabled: true } });
+
 function App() {
   useEffect(() => {
     const syncUser = async () => {
@@ -42,6 +41,7 @@ function App() {
 
     syncUser();
   }, []);
+
   return (
     <View style={styles.container}>
       <Navigator />
@@ -50,13 +50,13 @@ function App() {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'whitesmoke',
-    justifyContent: 'center',
+    backgroundColor: "whitesmoke",
+    justifyContent: "center",
   },
 });
 
 export default withAuthenticator(App);
- 

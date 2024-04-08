@@ -4,14 +4,15 @@ import SettingsScreen from "../screens/SettingsScreen";
 
 import ChatsScreen from "../screens/ChatsScreen/ChatsScreen";
 import { Ionicons, Entypo } from "@expo/vector-icons";
+
 const Tab = createBottomTabNavigator();
 const MainTabNavigator = () => {
   return (
     <Tab.Navigator
       initialRouteName="Chats"
       screenOptions={{
-        tabBarStyle: { backgroundColor: 'whitesmoke' },
-        headerStyle: { backgroundColor: 'whitesmoke' },
+        tabBarStyle: { backgroundColor: "whitesmoke" },
+        headerStyle: { backgroundColor: "whitesmoke" },
       }}
     >
       <Tab.Screen
@@ -46,14 +47,14 @@ const MainTabNavigator = () => {
         component={ChatsScreen}
         options={({ navigation }) => ({
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="chatbubble-outline" size={size} color={color} />
+            <Ionicons name="chatbubbles-sharp" size={size} color={color} />
           ),
           headerRight: () => (
             <Entypo
-              onPress={() => navigation.navigate('Contacts')}
+              onPress={() => navigation.navigate("Contacts")}
               name="new-message"
               size={18}
-              color={'royalblue'}
+              color={"royalblue"}
               style={{ marginRight: 15 }}
             />
           ),

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { FlatList } from 'react-native';
-import ContactListItem from '../components/ContactListItem';
-import { API, graphqlOperation, Auth } from "aws-amplify";
+import { FlatList } from "react-native";
+import ContactListItem from "../components/ContactListItem";
+import { API, graphqlOperation } from "aws-amplify";
 import { listUsers } from "../graphql/queries";
 
 const ContactsScreen = () => {
@@ -12,12 +12,12 @@ const ContactsScreen = () => {
       setUsers(result.data?.listUsers?.items);
     });
   }, []);
-    
+
   return (
     <FlatList
       data={users}
       renderItem={({ item }) => <ContactListItem user={item} />}
-      style={{ backgroundColor: 'white' }}
+      style={{ backgroundColor: "white" }}
     />
   );
 };
