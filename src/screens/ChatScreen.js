@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
   FlatList,
   KeyboardAvoidingView,
   ActivityIndicator,
+  Platform, 
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import Message from "../components/Message";
