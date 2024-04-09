@@ -5,44 +5,54 @@ export const getChatRoom = /* GraphQL */ `
   query GetChatRoom($id: ID!) {
     getChatRoom(id: $id) {
       id
+      name
+      image
       Messages {
         items {
           id
+          createdAt
           text
           chatroomID
           userID
-          createdAt
           updatedAt
-          __typename
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
-        __typename
+        startedAt
       }
       users {
         items {
           id
-          chatRoomId
-          userId
+          chatRoomID
+          userID
           createdAt
           updatedAt
-          __typename
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
-        __typename
+        startedAt
       }
       LastMessage {
         id
+        createdAt
         text
         chatroomID
         userID
-        createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       chatRoomLastMessageId
-      __typename
     }
   }
 `;
@@ -55,30 +65,84 @@ export const listChatRooms = /* GraphQL */ `
     listChatRooms(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        name
+        image
         Messages {
           nextToken
-          __typename
+          startedAt
         }
         users {
           nextToken
-          __typename
+          startedAt
         }
         LastMessage {
           id
+          createdAt
           text
           chatroomID
           userID
-          createdAt
           updatedAt
-          __typename
+          _version
+          _deleted
+          _lastChangedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         chatRoomLastMessageId
-        __typename
       }
       nextToken
-      __typename
+      startedAt
+    }
+  }
+`;
+export const syncChatRooms = /* GraphQL */ `
+  query SyncChatRooms(
+    $filter: ModelChatRoomFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncChatRooms(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        image
+        Messages {
+          nextToken
+          startedAt
+        }
+        users {
+          nextToken
+          startedAt
+        }
+        LastMessage {
+          id
+          createdAt
+          text
+          chatroomID
+          userID
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        chatRoomLastMessageId
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -86,12 +150,14 @@ export const getMessage = /* GraphQL */ `
   query GetMessage($id: ID!) {
     getMessage(id: $id) {
       id
+      createdAt
       text
       chatroomID
       userID
-      createdAt
       updatedAt
-      __typename
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -104,28 +170,61 @@ export const listMessages = /* GraphQL */ `
     listMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        createdAt
         text
         chatroomID
         userID
-        createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
-      __typename
+      startedAt
     }
   }
 `;
-export const messagesByChatroomID = /* GraphQL */ `
-  query MessagesByChatroomID(
+export const syncMessages = /* GraphQL */ `
+  query SyncMessages(
+    $filter: ModelMessageFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncMessages(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        createdAt
+        text
+        chatroomID
+        userID
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const listMessagesByChatRoom = /* GraphQL */ `
+  query ListMessagesByChatRoom(
     $chatroomID: ID!
+    $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelMessageFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    messagesByChatroomID(
+    listMessagesByChatRoom(
       chatroomID: $chatroomID
+      createdAt: $createdAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -133,44 +232,17 @@ export const messagesByChatroomID = /* GraphQL */ `
     ) {
       items {
         id
+        createdAt
         text
         chatroomID
         userID
-        createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
-      __typename
-    }
-  }
-`;
-export const messagesByUserID = /* GraphQL */ `
-  query MessagesByUserID(
-    $userID: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelMessageFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    messagesByUserID(
-      userID: $userID
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        text
-        chatroomID
-        userID
-        createdAt
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
+      startedAt
     }
   }
 `;
@@ -184,31 +256,37 @@ export const getUser = /* GraphQL */ `
       Messages {
         items {
           id
+          createdAt
           text
           chatroomID
           userID
-          createdAt
           updatedAt
-          __typename
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
-        __typename
+        startedAt
       }
       ChatRooms {
         items {
           id
-          chatRoomId
-          userId
+          chatRoomID
+          userID
           createdAt
           updatedAt
-          __typename
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
-        __typename
+        startedAt
       }
       createdAt
       updatedAt
-      __typename
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -226,18 +304,57 @@ export const listUsers = /* GraphQL */ `
         image
         Messages {
           nextToken
-          __typename
+          startedAt
         }
         ChatRooms {
           nextToken
-          __typename
+          startedAt
         }
         createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
-      __typename
+      startedAt
+    }
+  }
+`;
+export const syncUsers = /* GraphQL */ `
+  query SyncUsers(
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncUsers(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        status
+        image
+        Messages {
+          nextToken
+          startedAt
+        }
+        ChatRooms {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -245,31 +362,37 @@ export const getUserChatRoom = /* GraphQL */ `
   query GetUserChatRoom($id: ID!) {
     getUserChatRoom(id: $id) {
       id
-      chatRoomId
-      userId
+      chatRoomID
+      userID
       chatRoom {
         id
+        name
+        image
         Messages {
           nextToken
-          __typename
+          startedAt
         }
         users {
           nextToken
-          __typename
+          startedAt
         }
         LastMessage {
           id
+          createdAt
           text
           chatroomID
           userID
-          createdAt
           updatedAt
-          __typename
+          _version
+          _deleted
+          _lastChangedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         chatRoomLastMessageId
-        __typename
       }
       user {
         id
@@ -278,19 +401,23 @@ export const getUserChatRoom = /* GraphQL */ `
         image
         Messages {
           nextToken
-          __typename
+          startedAt
         }
         ChatRooms {
           nextToken
-          __typename
+          startedAt
         }
         createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       createdAt
       updatedAt
-      __typename
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -303,14 +430,18 @@ export const listUserChatRooms = /* GraphQL */ `
     listUserChatRooms(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        chatRoomId
-        userId
+        chatRoomID
+        userID
         chatRoom {
           id
+          name
+          image
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           chatRoomLastMessageId
-          __typename
         }
         user {
           id
@@ -319,42 +450,48 @@ export const listUserChatRooms = /* GraphQL */ `
           image
           createdAt
           updatedAt
-          __typename
+          _version
+          _deleted
+          _lastChangedAt
         }
         createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
-      __typename
+      startedAt
     }
   }
 `;
-export const userChatRoomsByChatRoomId = /* GraphQL */ `
-  query UserChatRoomsByChatRoomId(
-    $chatRoomId: ID!
-    $sortDirection: ModelSortDirection
+export const syncUserChatRooms = /* GraphQL */ `
+  query SyncUserChatRooms(
     $filter: ModelUserChatRoomFilterInput
     $limit: Int
     $nextToken: String
+    $lastSync: AWSTimestamp
   ) {
-    userChatRoomsByChatRoomId(
-      chatRoomId: $chatRoomId
-      sortDirection: $sortDirection
+    syncUserChatRooms(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
+      lastSync: $lastSync
     ) {
       items {
         id
-        chatRoomId
-        userId
+        chatRoomID
+        userID
         chatRoom {
           id
+          name
+          image
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           chatRoomLastMessageId
-          __typename
         }
         user {
           id
@@ -363,58 +500,18 @@ export const userChatRoomsByChatRoomId = /* GraphQL */ `
           image
           createdAt
           updatedAt
-          __typename
+          _version
+          _deleted
+          _lastChangedAt
         }
         createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
-      __typename
-    }
-  }
-`;
-export const userChatRoomsByUserId = /* GraphQL */ `
-  query UserChatRoomsByUserId(
-    $userId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelUserChatRoomFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    userChatRoomsByUserId(
-      userId: $userId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        chatRoomId
-        userId
-        chatRoom {
-          id
-          createdAt
-          updatedAt
-          chatRoomLastMessageId
-          __typename
-        }
-        user {
-          id
-          name
-          status
-          image
-          createdAt
-          updatedAt
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
+      startedAt
     }
   }
 `;
