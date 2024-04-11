@@ -5,6 +5,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import Message from "../components/Message";
