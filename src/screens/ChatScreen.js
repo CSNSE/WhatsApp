@@ -5,7 +5,6 @@ import {
   FlatList,
   KeyboardAvoidingView,
   ActivityIndicator,
-  Platform,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import Message from "../components/Message";
@@ -15,7 +14,6 @@ import messages from "../../assets/data/messages.json";
 import { API, graphqlOperation } from "aws-amplify";
 import { getChatRoom, listMessagesByChatRoom } from "../graphql/queries";
 import { onCreateMessage, onUpdateChatRoom } from "../graphql/subscriptions";
-
 const ChatScreen = () => {
   const [chatRoom, setChatRoom] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -27,7 +25,6 @@ const ChatScreen = () => {
     API.graphql(graphqlOperation(getChatRoom, { id: chatroomID })).then(
       (result) => setChatRoom(result.data?.getChatRoom)
     );
-
     const subscription = API.graphql(
       graphqlOperation(onUpdateChatRoom, { filter: { id: { eq: chatroomID } } })
     ).subscribe({
@@ -39,12 +36,12 @@ const ChatScreen = () => {
       },
       error: (err) => console.warn(err),
     });
-
     return () => subscription.unsubscribe();
   }, [chatroomID]);
 
   // fetch Messages
   useEffect(() => {
+    console.log("fetch message fir ", chatroomID);
     API.graphql(
       graphqlOperation(listMessagesByChatRoom, {
         chatroomID,
@@ -53,7 +50,6 @@ const ChatScreen = () => {
     ).then((result) => {
       setMessages(result.data?.listMessagesByChatRoom?.items);
     });
-
     // Subscribe to new messages
     const subscription = API.graphql(
       graphqlOperation(onCreateMessage, {
@@ -65,10 +61,8 @@ const ChatScreen = () => {
       },
       error: (err) => console.warn(err),
     });
-
     return () => subscription.unsubscribe();
   }, [chatroomID]);
-
   useEffect(() => {
     navigation.setOptions({ title: route.params.name });
   }, [route.params.name]);
