@@ -43,7 +43,9 @@ const ContactsScreen = () => {
     const newChatRoom = newChatRoomData.data?.createChatRoom;
 
     // Add the selected users to the ChatRoom
-
+    console.log("newchatroom.id: " + newChatRoom.id);
+    console.log("slected user ids: " + selectedUserIds.map(userID));
+    console.log("USERS: " + userID + " space " + authUser.attributes.sub);
     await Promise.all(
       selectedUserIds.map((userID) =>
         API.graphql(
