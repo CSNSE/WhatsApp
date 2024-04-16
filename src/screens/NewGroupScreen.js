@@ -35,35 +35,44 @@ const ContactsScreen = () => {
   const onCreateGroupPress = async () => {
     // Create a new Chatroom
     const newChatRoomData = await API.graphql(
-      graphqlOperation(createChatRoom, { input: {} })
+      graphqlOperation(createChatRoom, { input: { name } })
     );
     if (!newChatRoomData.data?.createChatRoom) {
-      console.log("Error creating the chat error");
+      console.log("Error creating the chat room");
+      return; // Exit function early if chat room creation failed
     }
-    const newChatRoom = newChatRoomData.data?.createChatRoom;
-
-    // Add the selected users to the ChatRoom
-    console.log("newchatroom.id: " + newChatRoom.id);
-    console.log("slected user ids: " + selectedUserIds.map(userID));
-    console.log("USERS: " + userID + " space " + authUser.attributes.sub);
-    await Promise.all(
-      selectedUserIds.map((userID) =>
-        API.graphql(
-          graphqlOperation(createUserChatRoom, {
-            input: { chatRoomID: newChatRoom.id, userID },
-          })
-        )
-      )
-    );
-
+  
+    const newChatRoom = newChatRoomData.data.createChatRoom;
+    console.log("chatroomid: " + newChatRoom.id);
+  
     // Add the auth user to the ChatRoom
     const authUser = await Auth.currentAuthenticatedUser();
     await API.graphql(
       graphqlOperation(createUserChatRoom, {
-        input: { chatRoomID: newChatRoom.id, userID: authUser.attributes.sub },
+        input: {
+          chatRoomID: newChatRoom.id,
+          userID: authUser.attributes.sub,
+        },
       })
     );
-
+  
+    // Add the selected users to the ChatRoom
+    //////////////////////////
+    selectedUserIds.map((userid) => console.log(userid) );
+    //////////////////////////////
+    await Promise.all(
+      
+      selectedUserIds.map((UserIDD) =>
+      
+        API.graphql(
+          
+          graphqlOperation(createUserChatRoom, {
+            input: { chatRoomID: newChatRoom.id, userID: UserIDD },
+          })
+        )
+      )
+    );
+  
     setSelectedUserIds([]);
     setName("");
     // navigate to the newly created ChatRoom
