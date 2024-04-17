@@ -47,18 +47,21 @@ const ContactsScreen = () => {
   
     // Add the auth user to the ChatRoom
     const authUser = await Auth.currentAuthenticatedUser();
+    console.log("did i get to auth?: " + authUser.attributes.sub);
     await API.graphql(
       graphqlOperation(createUserChatRoom, {
         input: {
-          chatRoomID: newChatRoom.id,
-          userID: authUser.attributes.sub,
+          chatRoomId: newChatRoom.id,
+          userId: authUser.attributes.sub,
         },
       })
     );
   
     // Add the selected users to the ChatRoom
     //////////////////////////
-    selectedUserIds.map((userid) => console.log(userid) );
+    console.log("it got to this point 1st");
+    selectedUserIds.map((useride) => console.log("userstuff: " + useride));
+    console.log("it got to this point... 2nd");
     //////////////////////////////
     await Promise.all(
       
@@ -67,7 +70,7 @@ const ContactsScreen = () => {
         API.graphql(
           
           graphqlOperation(createUserChatRoom, {
-            input: { chatRoomID: newChatRoom.id, userID: UserIDD },
+            input: { chatRoomId: newChatRoom.id, userId: UserIDD },
           })
         )
       )
