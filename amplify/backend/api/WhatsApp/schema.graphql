@@ -20,7 +20,6 @@ type Message @model @auth(rules: [{ allow: public }]) {
     )
   userID: ID! @index(name: "byUser")
 }
-
 type User @model @auth(rules: [{ allow: public }]) {
   id: ID!
   name: String!

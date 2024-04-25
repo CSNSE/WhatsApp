@@ -14,6 +14,8 @@ import { onUpdateChatRoom } from "../graphql/subscriptions";
 import { deleteUserChatRoom } from "../graphql/mutations";
 import ContactListItem from "../components/ContactListItem";
 
+const { users } = chatRoom;
+
 const ChatRoomInfo = () => {
   const [chatRoom, setChatRoom] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -83,8 +85,6 @@ const ChatRoomInfo = () => {
     return <ActivityIndicator />;
   }
 
-  const users = chatRoom.users.items.filter((item) => !item._deleted);
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{chatRoom.name}</Text>
@@ -145,33 +145,29 @@ export const getChatRoom = /* GraphQL */ `
   query GetChatRoom($id: ID!) {
     getChatRoom(id: $id) {
       id
-      updatedAt
       name
-      users {
-        items {
-          id
-          chatRoomID
-          userID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          user {
-            id
-            name
-            status
-            image
-          }
-        }
+      image
+      Messages {
         nextToken
-        startedAt
+        __typename
+      }
+      users {
+        nextToken
+        __typename
+      }
+      LastMessage {
+        id
+        createdAt
+        text
+        chatroomID
+        userID
+        updatedAt
+        __typename
       }
       createdAt
-      _version
-      _deleted
-      _lastChangedAt
+      updatedAt
       chatRoomLastMessageId
+      __typename
     }
   }
 `;
