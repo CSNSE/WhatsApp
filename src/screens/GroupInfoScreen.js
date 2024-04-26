@@ -14,8 +14,6 @@ import { onUpdateChatRoom } from "../graphql/subscriptions";
 import { deleteUserChatRoom } from "../graphql/mutations";
 import ContactListItem from "../components/ContactListItem";
 
-const { users } = chatRoom;
-
 const ChatRoomInfo = () => {
   const [chatRoom, setChatRoom] = useState(null);
   const [loading, setLoading] = useState(false);
