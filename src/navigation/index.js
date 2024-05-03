@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import ChatScreen from "../screens/ChatScreen";
+import ChatScreen from "../screens/ChatScreen/ChatScreen";
 import ContactsScreen from "../screens/ContactsScreen";
 import GroupInfoScreen from "../screens/GroupInfoScreen";
 import NewGroupScreen from "../screens/NewGroupScreen";
@@ -9,6 +9,7 @@ import AddContactsToGroupScreen from "../screens/AddContactsToGroupScreen";
 import MainTabNavigator from "./MainTabNavigator";
 
 const Stack = createNativeStackNavigator();
+
 const Navigator = () => {
   return (
     <NavigationContainer>
@@ -32,4 +33,5 @@ const Navigator = () => {
     </NavigationContainer>
   );
 };
+
 export default Navigator;

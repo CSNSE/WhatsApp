@@ -8,13 +8,13 @@ import {
   Platform,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
-import Message from "../components/Message";
-import InputBox from "../components/InputBox";
-import bg from "../../assets/images/BG.png";
-import messages from "../../assets/data/messages.json";
+import Message from "../../components/Message";
+import InputBox from "../../components/InputBox";
+import bg from "../../../assets/images/BG.png";
+import messages from "../../../assets/data/messages.json";
 import { API, graphqlOperation } from "aws-amplify";
-import { getChatRoom, listMessagesByChatRoom } from "../graphql/queries";
-import { onCreateMessage, onUpdateChatRoom } from "../graphql/subscriptions";
+import { getChatRoom, listMessagesByChatRoom } from "../../graphql/queries";
+import { onCreateMessage, onUpdateChatRoom } from "../../graphql/subscriptions";
 import { Feather } from "@expo/vector-icons";
 
 const ChatScreen = () => {
