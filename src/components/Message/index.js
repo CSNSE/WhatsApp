@@ -1,88 +1,63 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Pressable,
-  useWindowDimensions,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, useWindowDimensions, Image } from "react-native";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-dayjs.extend(relativeTime);
 import { Auth, Storage } from "aws-amplify";
-import { useEffect, useState } from "react";
-import { S3Image } from "aws-amplify-react-native";
-import ImageView from "react-native-image-viewing";
+
+dayjs.extend(relativeTime);
 
 const Message = ({ message }) => {
   const [isMe, setIsMe] = useState(false);
-  const [imageViewerVisible, setImageViewerVisible] = useState(false);
-  const [downloadAttachments, setDownloadedAttachments] = useState([]);
-
+  const [downloadAttachments, setDownloadAttachments] = useState([]);
   const { width } = useWindowDimensions();
 
   useEffect(() => {
-    const isMyMessage = async () => {
-      const authUser = await Auth.currentAuthenticatedUser();
-
-      setIsMe(message.userID === authUser.attributes.sub);
-    };
-
-    isMyMessage();
-  }, []);
-
-  useEffect(() => {
-    const downloadAttachements = async () => {
-      if (message.Attachments.items) {
-        const downloadedAttachments = await Promise.all(
-          message.Attachments.items.map((attachment) =>
-            Storage.get(attachment.storageKey).then((uri) => ({
-              ...attachment,
-              uri,
-            }))
-          )
-        );
-  
-        setDownloadedAttachements(downloadedAttachments);
+    const fetchUserData = async () => {
+      try {
+        const authUser = await Auth.currentAuthenticatedUser();
+        setIsMe(message.userID === authUser.attributes.sub);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
     };
-    downloadAttachements();
-  }, [message.Attachements.items]);
 
-  const imageContainerWidth = width * 0.8 - 30;
+    fetchUserData();
+  }, [message.userID]);
+
+  useEffect(() => {
+    const downloadAttachments = async () => {
+      try {
+        if (message.Attachments && message.Attachments.items) {
+          const downloadedAttachments = await Promise.all(
+            message.Attachments.items.map(async (attachment) => {
+              const uri = await Storage.get(attachment.storageKey);
+              return { ...attachment, uri };
+            })
+          );
+          setDownloadAttachments(downloadedAttachments);
+        }
+      } catch (error) {
+        console.error("Error downloading attachments:", error);
+      }
+    };
+
+    downloadAttachments();
+  }, [message.Attachments]);
+
+  const renderAttachments = () => {
+    return downloadAttachments.map((attachment, index) => (
+      <Image key={index} source={{ uri: attachment.uri }} style={styles.image} />
+    ));
+  };
 
   return (
     <View
       style={[
         styles.container,
-        {
-          backgroundColor: isMe ? "#DCF8C5" : "white",
-          alignSelf: isMe ? "flex-end" : "flex-start",
-        },
+        { backgroundColor: isMe ? "#DCF8C5" : "white", alignSelf: isMe ? "flex-end" : "flex-start" },
       ]}
     >
-      {downloadAttachments.length > 0 && (
-        <View style={[{ width: imageContainerWidth }, {maxWidth: '200px'}, styles.images]}>
-          {downloadAttachments.map((imageSource) => (
-            <Pressable
-              style={[
-                styles.imageContainer,
-                downloadAttachments.length === 1 && { flex: 1 },
-              ]}
-              onPress={() => setImageViewerVisible(true)}
-            >
-              <Image source={{ uri: imageSource.uri }} style={styles.image} />
-            </Pressable>
-          ))}
-
-          <ImageView
-            images={downloadAttachments.map(({ uri }) => ({ uri }))}
-            imageIndex={0}
-            visible={imageViewerVisible}
-            onRequestClose={() => setImageViewerVisible(false)}
-          />
-        </View>
-      )}
+      {renderAttachments()}
       <Text>{message.text}</Text>
       <Text style={styles.time}>{dayjs(message.createdAt).fromNow(true)}</Text>
     </View>
@@ -95,37 +70,14 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     maxWidth: "80%",
-
-    // Shadows
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.18,
     shadowRadius: 1.0,
-
     elevation: 1,
   },
-  time: {
-    color: "gray",
-    alignSelf: "flex-end",
-  },
-  images: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-  imageContainer: {
-    width: "50%",
-    aspectRatio: 1,
-    padding: 3,
-  },
-  image: {
-    flex: 1,
-    borderColor: "white",
-    borderWidth: 1,
-    borderRadius: 5,
-  },
+  time: { color: "gray", alignSelf: "flex-end" },
+  image: { width: 100, height: 100, borderRadius: 5, marginBottom: 5 },
 });
 
 export default Message;
